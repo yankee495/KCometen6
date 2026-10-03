@@ -66,3 +66,17 @@ The premium high-fidelity 3D theme assets provided in this release showcase comm
 * **Core 3D Engine:** This project is based on work by Peter Müller, who created the initial version for KDE3 under the name KCometen3. It was later ported and updated for KDE4 as KCometen4 by John Stamp. Ported to KDE Plasma 6 & Wayland as KCometen6 by John Smith.
 
 * **Images:** The images used in the distro packs are credited to the original artists who graciously shared their work with the open-source community.
+
+* ## 📸 Live Desktop Simulation & Interface Overview
+Here is the optimized, unchained 150-comet heavy particle storm running natively across modern standalone Wayland desktops:
+
+### 🌌 Live Physics Engine Simulation (Full-Screen Pass)
+![KCometen6 Live Desktop Mode on CachyOS](KCometen6_on_CachyOS_1.png)
+
+### 🎨 Configuration Dashboard Panels
+![Tab 1 - Physics Density and Speed Control](kcometen6_configuration_panel_tab1.png)
+
+![Tab 2 - Custom Image Selection and Dimension Guidelines](kcometen6_configuration_panel_tab2.png)
+
+![Tab 3 - Core Features and Screensaver Idle Daemon Setup](kcometen6_configuration_panel_tab3.png)
+
