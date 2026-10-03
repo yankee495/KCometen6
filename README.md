@@ -67,6 +67,12 @@ The premium high-fidelity 3D theme assets provided in this release showcase comm
 
 * **Images:** The images used in the distro packs are credited to the original artists who graciously shared their work with the open-source community.
 
+* ## 📺 Video Demonstration & Installation Walkthrough
+Click the preview image below to watch KCometen6 in 16:9 high-definition:
+
+[![Watch KCometen6 Standalone Video Preview](https://img.youtube.com/vi/FCmL3ls5vI8/maxresdefault.jpg)](https://youtu.be/FCmL3ls5vI8)
+
+
 * ## 📸 Live Desktop Simulation & Interface Overview
 Here is the optimized, unchained 150-comet heavy particle storm running natively across modern standalone Wayland desktops:
 
