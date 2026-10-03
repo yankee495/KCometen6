@@ -1,4 +1,4 @@
-# KCometen6 Standalone Portable Screen Sandbox (v1.0.0)
+# KCometen6 Standalone Portable 3D Screensaver (v1.0.0)
 
 KCometen6 is a high-performance C++ modern revival of a classic 3D cosmic particle simulation engine, re-engineered for modern rolling-release **Wayland** desktops such as Arch, CachyOS and openSUSE Tumbleweed.  It has also been tested on Mageia 10. It functions as a completely standalone, directory-isolated visual engine that operates independently of system power management or restrictive desktop screensaver frameworks.
 
