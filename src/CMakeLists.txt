@@ -10,27 +10,50 @@ find_package(GLUT REQUIRED)
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${X11_INCLUDE_DIR}
     ${OPENGL_INCLUDE_DIR}
     ${GLUT_INCLUDE_DIR}
 )
 
-set(SOURCES
-    bezier.cpp
-    cometen3.cpp
-    cometenmath.cpp
-    cometenscene.cpp
-    curvecomet.cpp
-    decal.cpp
-    explosion.cpp
-    glow.cpp
-    lightning.cpp
-    particlesystem.cpp
-    pcomet.cpp
-    rotatecomet.cpp
-    vec.cpp
-    standalone_main.cpp
-)
+# --- DUAL-AWARE TARGET SOURCE MAP ---
+# If running inside the staged release architecture, target the nested src/ files
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/standalone_main.cpp")
+    set(SOURCES
+        src/bezier.cpp
+        src/cometen3.cpp
+        src/cometenmath.cpp
+        src/cometenscene.cpp
+        src/curvecomet.cpp
+        src/decal.cpp
+        src/explosion.cpp
+        src/glow.cpp
+        src/lightning.cpp
+        src/particlesystem.cpp
+        src/pcomet.cpp
+        src/rotatecomet.cpp
+        src/vec.cpp
+        src/standalone_main.cpp
+    )
+else()
+    # Otherwise, fall back cleanly to your loose, local development folder array layout
+    set(SOURCES
+        bezier.cpp
+        cometen3.cpp
+        cometenmath.cpp
+        cometenscene.cpp
+        curvecomet.cpp
+        decal.cpp
+        explosion.cpp
+        glow.cpp
+        lightning.cpp
+        particlesystem.cpp
+        pcomet.cpp
+        rotatecomet.cpp
+        vec.cpp
+        standalone_main.cpp
+    )
+endif()
 
 add_executable(kcometen6_run ${SOURCES})
 
@@ -38,4 +61,4 @@ add_executable(kcometen6_run ${SOURCES})
 target_compile_definitions(kcometen6_run PRIVATE GL_GLEXT_PROTOTYPES=1)
 
 # Ensure the library links core OpenGL, X11, and GLUT layers directly
-target_link_libraries(kcometen6_run PRIVATE ${X11_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GL)
+target_link_libraries(kcometen6_run PRIVATE ${X11_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GL GLU)

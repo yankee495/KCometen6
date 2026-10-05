@@ -1,8 +1,32 @@
 KCometen6 ChangeLog
 ===================
-Version 1.0.0
-  * Port KCometen4 to KDE Plasma 6 & Wayland
 
+Version 1.0.2
+  * Added a "Make "Portable" button to the GUI Panel for installs that use PKGBUILD which will install KCometen6 system-wide, but that method does not create a portable folder that you can move to another machine.  Use build_and_deploy.sh to build only a portable folder with no install. Run stage_release.sh to create a new clean source tree.  Read the header of stage_release.sh for instructions.  If you do not change the version number, it will overwrite ther last new source tree that you created. It's set for "kcometen6_v1.0.3" now.
+
+  * Fixed the GUI Panel to allow spaces in names when creating or using portable folders.
+
+  * Made the GUI Panel run directory aware so it now knows if it's running from a system-wide install or a portable folder in the home directory.
+    A system-wide install parses settings.conf from /usr/share/kcometen6/.
+    A portable folder parses settings.conf from ~/.config/kcometen6/.
+
+  * Added system-path awareness to kcometen6_idle (Screensaver Mode).
+    It will now dynamically use the system-wide kcometen6_run binary when installed in /usr/bin/, but falls back to the local kcometen6_run when started from a portable folder.
+
+  * kcometen6_idle intercepts redundant execution requests, prints a protection log, and exits.
+
+  * Dual-Aware Compilation Configuration (CMakeLists.txt)
+    It targets nested src/ arrays for system-wide builds but falls back to loose folder files for your local programming tweaks.
+
+  * Staging Automation (arch_release.sh)
+    A custom release script, clearing out legacy compilation artifacts and splitting your loose development tree into structured layout folders (src/, textures/) inside a temporary staging buffer and creates a tarball in the root of your source tree without chaning your root tree (stage_release.sh & build_and_deploy.sh still work).
+
+    Out-of-Source Package Installer (PKGBUILD)
+  *  Modified the build() and package() blocks to compile out-of-source from your staging folder arrays, compile, inject custom desktop launcher profile strings, and map permissions system-wide.
+
+
+Version 1.0.1
+  * Port KCometen4 to KDE Plasma 6 & Wayland
 
 
 KCometen4 ChangeLog

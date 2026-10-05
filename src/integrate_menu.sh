@@ -21,15 +21,25 @@ chmod +x "${LAUNCHER_PATH}"
 # 3. PROVISION THE NATIVE DESKTOP ENTRY METRICS BLOCK
 cat << EOF > "${TARGET_DESKTOP}"
 [Desktop Entry]
-Type=Application
-Name=KCometen6 Config
-Comment=Manage your standalone 3D cosmic particle screensaver
+Comment[en_US]=
+Categories=Qt;KDE;Utility;
+Comment=
 Exec=${LAUNCHER_PATH}
+GenericName[en_US]=
+GenericName=
 Icon=${ICON_PATH}
-Terminal=false
-Categories=Settings;DesktopSettings;Qt;
+MimeType=
+Name[en_US]=KCometen6 GUI
+Name=KCometen6 GUI
+NoDisplay=false
+Path=${PORTABLE_DIR}/
+PrefersNonDefaultGPU=false
 StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
 X-KDE-SubstituteUID=false
+X-KDE-Username=
 EOF
 
 # 4. FLUSH SYSTEM APPLICATION CACHE SO LINUX ADAPTS IMMEDIATELY
