@@ -36,7 +36,7 @@ make -j$(nproc)
 
 echo "[3/4] Compiling custom leak-proof Wayland input-idle monitor daemon..."
 # Automatically injects Tumbleweed's specific include path paths on the fly!
-g++ -O2 -Wall "${SRC_DIR}/src/kcometen6_idle.cpp" $(pkg-config --cflags --libs wayland-client) -o "${BUILD_DIR}/kcometen6_idle"
+#g++ -O2 -Wall "${SRC_DIR}/src/kcometen6_idle.cpp" $(pkg-config --cflags --libs wayland-client) -o "${BUILD_DIR}/kcometen6_idle"
 
 echo "[4/4] Harvesting portable dashboard scripts and asset texture layers..."
 # First, populate your active build directory with assets so it never runs bare!
@@ -57,8 +57,8 @@ cp "${SRC_DIR}/src"/*.png "${DEPLOY_DIR}/" 2>/dev/null || true
 cp "${SRC_DIR}/src"/*.jpg "${DEPLOY_DIR}/" 2>/dev/null || true
 cp "${SRC_DIR}/src/settings.conf" "${DEPLOY_DIR}/" 2>/dev/null || true
 # C the menu item creation script to the portable folder
-cp "${SRC_DIR}/src/integrate_menu.sh" "${DEPLOY_DIR}/" 2>/dev/null || true
-chmod +x "${DEPLOY_DIR}/integrate_menu.sh"
+cp "${SRC_DIR}/src/integrate_kde_menu.sh" "${DEPLOY_DIR}/" 2>/dev/null || true
+chmod +x "${DEPLOY_DIR}/integrate_kde_menu.sh"
 
 echo "  "
 echo "  "

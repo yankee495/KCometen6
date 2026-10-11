@@ -1,7 +1,31 @@
 KCometen6 ChangeLog
 ===================
 
+
+Version 1.0.4
+
+  * Added the KCometen6_Build_GUI which has many features including Install Dependancies, Build New Source tree, Build Multi-architecture Portable Folders and Install System-wide using Pacman.
+
+  INSTALL THE REQUIRED RUNTIME DEPENDENCIES
+
+  TO USE THE NEW KCometen6 Build & Deploy GUI.
+
+
+  Install <code>python-pyqt6</code> through your package manager or use:
+  sudo pacman -S python-pyqt6
+
+  Once python-pyqt6 is installed, you can completely bypass the terminal command line!
+
+  Simply open the root folder and run the graphical build GUI (KCometen6_Build_GUI).
+
+  NOTICE: The KCometen6_Build_GUI is only available in the root folder.
+  It is not included in the system-wide install so casual users can not build source trees etc.
+
+  * Updated all code and scripts to be smarter when determining where the components are running from and the scripts dynamically update PKGBUILD and SRCINFO.
+
+
 Version 1.0.2
+
   * Added a "Make "Portable" button to the GUI Panel for installs that use PKGBUILD which will install KCometen6 system-wide, but that method does not create a portable folder that you can move to another machine.  Use build_and_deploy.sh to build only a portable folder with no install. Run stage_release.sh to create a new clean source tree.  Read the header of stage_release.sh for instructions.  If you do not change the version number, it will overwrite ther last new source tree that you created. It's set for "kcometen6_v1.0.3" now.
 
   * Fixed the GUI Panel to allow spaces in names when creating or using portable folders.

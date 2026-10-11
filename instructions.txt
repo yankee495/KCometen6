@@ -1,0 +1,49 @@
+Future instructions:
+
+See README.md
+
+arch_install.sh
+
+arch_release.sh
+
+build_and_deploy.sh
+
+build_multi_arch.sh
+
+
+
+stage_release_build.sh
+
+The GUI automatically increments the version to the next one up, v1.0.3 becomes v1.0.4 and it dynamically updates the .SRCINFO & PKGBUILD to 1.0.4.
+
+Terminal options are still available:
+
+Running `stage_release_build.sh 1.0.7` in a terminal creates version v1.0.7 and dynamically updates the .SRCINFO & PKGBUILD.
+
+Running `stage_release_build.sh 1.0.4` in a terminal overwrites version v1.0.4 and dynamically updates the .SRCINFO & PKGBUILD.
+
+It will always ask if you want to overwrite an existing source tree.
+
+NOTE: Changing a folder name by omiting the 'v' from the name leaves that folder as a backup.<br>
+Example: Changing kcometen6_v1.0.4 to kcometen6_1.0.4 will allow you to run:<br>
+
+`stage_release_build.sh 1.0.4` in a terminal to make a new version (kcometen6_v1.0.4) and dynamically updates the .SRCINFO & PKGBUILD.<br>
+kcometen6_1.0.4 without the 'v' is left behind as a backup of v1.0.4.
+
+
+
+make_tarball.sh
+
+
+
+makepkg -C -si
+
+makepkg -C -s -i -c
+
+
+
+git clone https://github.com/yankee495/KCometen6
+
+
+Uninstall:
+sudo pacman -R kcometen6

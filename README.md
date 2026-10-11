@@ -1,5 +1,12 @@
-# KCometen6 Standalone Portable 3D Screensaver (v1.0.0)
+# KCometen6 Standalone Portable 3D Screensaver (v1.0.4)
+<br>
+### The New KCometen6 Build & Deploy GUI
+🚀 **Want a quick, command-line-free setup on CachyOS & Arch Linux?** 
 
+[Click here to jump straight to the One-Click Build & Deploy GUI Method](#The-New-KCometen6-Build-And-Deploy-GUI)
+
+<br>
+## ✨ Information
 KCometen6 is a high-performance C++ modern revival of a classic 3D cosmic particle simulation engine, re-engineered for modern rolling-release **Wayland** desktops such as Arch, CachyOS and openSUSE Tumbleweed.  It has also been tested on Mageia 10. It functions as a completely standalone, directory-isolated visual engine that operates independently of system power management or restrictive desktop screensaver frameworks.
 
 ## ✨ Core Engineering Features
@@ -17,7 +24,7 @@ Before running the automated compilation script, ensure your Linux system has th
 
 - **Arch Linux / CachyOS:**
 
-`sudo pacman -S base-devel cmake freeglut wayland wayland-protocols python-pyqt6 python-dbus spectacle`
+`sudo pacman -S --needed --noconfirm base-devel cmake freeglut wayland wayland-protocols python-pyqt6 python-dbus spectacle`
 
 
 - **openSUSE Tumbleweed:** 
@@ -45,7 +52,7 @@ This will automatically assemble a standalone **`KCometen6`** deployment folder 
 * `kcometen6_run` (Core 3D Engine Executable)
 * `kcometen6_idle` (Native Wayland Input Tracker Daemon)
 * `KCometen6_Configure_GUI` (PyQt6 Configuration Panel Dashboard)
-* `integrate_menu.sh` (Dynamic KDE Application Menu Installer)
+* `integrate_kde_menu.sh` (Dynamic KDE Application Menu Installer)
 *  Default Images and configuration.
 
 
@@ -66,6 +73,79 @@ The premium high-fidelity 3D theme assets provided in this release showcase comm
 * **Core 3D Engine:** This project is based on work by Peter Müller, who created the initial version for KDE3 under the name KCometen3. It was later ported and updated for KDE4 as KCometen4 by John Stamp. Ported to KDE Plasma 6 & Wayland as KCometen6 by John Smith.
 
 * **Images:** The images used in the distro packs are credited to the original artists who graciously shared their work with the open-source community.
+<br><br>
+<hr>
+
+<div id="The-New-KCometen6-Build-And-Deploy-GUI" style="scroll-margin-top: 50px;">
+    <h2>The New KCometen6 Build & Deploy GUI</h2>
+</div>
+
+<hr>
+
+<p>
+ℹ️ <h2> NOTICE: </h2> <br> 
+INSTALL THE REQUIRED RUNTIME DEPENDENCIES
+
+FOR THE NEW KCometen6 Build & Deploy GUI.
+
+<p>
+  Install <code>python-pyqt6</code> through your package manager or use: <br>
+  <code>sudo pacman -S python-pyqt6</code>
+</p>
+<p>
+  Once python-pyqt6 is installed, you can completely bypass the terminal command line!
+  <br>
+  Simply open the folder and run the graphical build GUI.<br>
+<br>
+<br>
+  
+  NOTICE: The KCometen6_Build_GUI is only available in the root folder.
+  It is not included in the system-wide install so casual users can not build source trees etc.
+</p>
+
+<hr>
+<br>
+#### 📦 Button 1: Installs Build Dependancies for Compiling KCometen6 Using Pacman.
+<br>
+#### 🌱 Button 2: Creates a clean source tree using the new `stage_release_build.sh` script.
+
+The GUI automatically increments the version to the next one up, v1.0.3 becomes v1.0.4 and it dynamically updates the .SRCINFO & PKGBUILD to 1.0.4.
+
+Terminal options are still available:
+
+Running `stage_release_build.sh 1.0.7` in a terminal creates version v1.0.7 and dynamically updates the .SRCINFO & PKGBUILD.
+
+Running `stage_release_build.sh 1.0.4` in a terminal overwrites version v1.0.4 and dynamically updates the .SRCINFO & PKGBUILD.
+
+It will always ask if you want to overwrite an existing source tree.
+
+NOTE: Changing a folder name by omiting the 'v' from the name leaves that folder as a backup.<br>
+Example: Changing kcometen6_v1.0.4 to kcometen6_1.0.4 will allow you to run:<br>
+
+`stage_release_build.sh 1.0.4` in a terminal to make a new version (kcometen6_v1.0.4) and dynamically updates the .SRCINFO & PKGBUILD.<br>
+kcometen6_1.0.4 without the 'v' is left behind as a backup of v1.0.4.
+<br>
+<br>
+#### 🗜️ Button 3: Build Multi-Architecture Portable Folders (X86_64/V3/V4)
+
+Builds portable folders for all architectures supported by your system and places them in `KCometen6` in your root folder.
+They will be in sub-folderes named by architecture.<br>
+
+KCometen6_x86_64<br>
+KCometen6_x86_V3<br>
+KCometen6_x86_V4<br>
+
+
+#### 🌌 Button 4: Install System-Wide (arch_install.sh)
+
+Runs `arch_release.sh` to generate a local tarball then uses makepkg and PKGBUILD to compile and install KCometen6 system-wide.
+With AUR not accepting new registrations this is the best I can do to simplifiy installing KCometen6.<br>
+
+### 🎨 The KCometen6 Build & Deploy GUI. Full Install Made Easy on CachyOS & Arch Linux
+![The KCometen6 Build & Deploy GUI. Full Install Made Easy on CachyOS & Arch Linux](kcometen6_build_and_deploy_engine_gui.png)
+
+
+
 
 * ## 📺 Video Demonstration & Installation Walkthrough
 Click the preview image below to watch KCometen6 in 16:9 high-definition:
@@ -85,4 +165,5 @@ Here is the optimized, unchained 150-comet heavy particle storm running natively
 ![Tab 2 - Custom Image Selection and Dimension Guidelines](kcometen6_configuration_panel_tab2.png)
 
 ![Tab 3 - Core Features and Screensaver Idle Daemon Setup](kcometen6_configuration_panel_tab3.png)
+
 

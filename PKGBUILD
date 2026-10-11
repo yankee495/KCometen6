@@ -1,6 +1,6 @@
 # Maintainer: John (Yankee)
 pkgname=kcometen6
-pkgver=1.0.2
+pkgver=1.0.4
 pkgrel=1
 pkgdesc="Standalone Wayland 3D particle screensaver & comet engine (KCometen4 revival)"
 arch=('x86_64')
@@ -29,14 +29,11 @@ build() {
     cd "$srcdir/${pkgname}-${pkgver}"
   fi
 
-  # 1. Compile the Main Engine Binaries out-of-source via CMake
+  # 1. Compile BOTH Main Engine and Idle Daemon out-of-source via CMake
   mkdir -p build
   cd build
-  cmake ..
+  cmake -DCMAKE_BUILD_TYPE=Release ..
   make -j$(nproc)
-
-  # 2. Compile custom leak-proof Wayland input-idle monitor daemon from src/
-  g++ -O2 -Wall ../src/kcometen6_idle.cpp $(pkg-config --cflags --libs wayland-client) -o ../kcometen6_idle
 }
 
 package() {
@@ -47,9 +44,9 @@ package() {
     cd "$srcdir/${pkgname}-${pkgver}"
   fi
 
-  # 1. Deploy System Executables and Idle Daemons
+  # 1. Deploy System Executables and Idle Daemons straight from the CMake build cache
   install -Dm755 build/kcometen6_run  "$pkgdir/usr/bin/kcometen6_run"
-  install -Dm755 kcometen6_idle       "$pkgdir/usr/bin/kcometen6_idle"
+  install -Dm755 build/kcometen6_idle "$pkgdir/usr/bin/kcometen6_idle"
 
   # 2. Deploy Python Configuration Dashboard GUI
   install -Dm755 KCometen6_Configure_GUI "$pkgdir/usr/bin/kcometen6-gui"

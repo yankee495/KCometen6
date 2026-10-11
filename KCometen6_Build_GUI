@@ -1,0 +1,169 @@
+#!/usr/bin/env python3
+# ============================================================================
+# KCometen6 Automated Universal Toolchain Control Panel Dashboard (Launch Path Absolute)
+# ============================================================================
+import os
+import sys
+import subprocess
+from PyQt6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout,
+                             QPushButton, QTextEdit, QLabel, QMessageBox)
+from PyQt6.QtCore import QProcess, Qt
+from PyQt6.QtGui import QFont, QIcon, QPixmap
+
+class KCometenBuildMaster(QWidget):
+    def __init__(self):
+        super().__init__()
+        # 📂 ABSOLUTE LAUNCH TRACKING BOUNDARY
+        # Locks onto the exact folder context where you execute this panel
+        self.root_dir = os.path.abspath(os.getcwd())
+        self.script_dir = os.path.join(self.root_dir, "src")
+        self.process = None
+
+        # 🔍 SLIM DEPS ENGINE: Dynamic Terminal Discovery Pass
+        self.term = self.detect_system_terminal()
+
+        self.init_ui()
+
+    def detect_system_terminal(self):
+        """Probes the user's desktop environment to find their default terminal emulator."""
+        # Check environment configurations first
+        env_term = os.environ.get("TERMINAL")
+        if env_term and subprocess.getstatusoutput(f"command -v {env_term}")[0] == 0:
+            return env_term
+
+        # Cross-distribution priority checklist (CachyOS, Arch, GNOME, XFCE, fallback)
+        for emulator in ["konsole", "alacritty", "kitty", "foot", "gnome-terminal", "xfce4-terminal", "xterm"]:
+            if subprocess.getstatusoutput(f"command -v {emulator}")[0] == 0:
+                return emulator
+        return "xterm"
+
+    def init_ui(self):
+        self.setWindowTitle("🌌 KCometen6 Build & Deployment Engine")
+        self.setMinimumSize(760, 600)
+
+        # 🛡️ SYSTEM ICON GROUNDING: Locks strictly onto your active development root /src/ path
+        icon_path = os.path.join(self.script_dir, "kcometen6_icon.png")
+
+        if os.path.exists(icon_path):
+            self.setWindowIcon(QIcon(icon_path))
+
+        layout = QVBoxLayout()
+
+        # --- HEADER RENDER BAR ---
+        header_layout = QHBoxLayout()
+
+        # Visual Icon next to title
+        if os.path.exists(icon_path):
+            logo_label = QLabel()
+            pixmap = QPixmap(icon_path).scaled(40, 40, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+            logo_label.setPixmap(pixmap)
+            header_layout.addWidget(logo_label)
+
+        title_layout = QVBoxLayout()
+        header = QLabel("KCometen6 Engine Build Tools")
+        header.setFont(QFont("Arial", 14, QFont.Weight.Bold))
+        title_layout.addWidget(header)
+
+        self.subheader = QLabel(f"⚙️ Target Workspace Root: {self.root_dir}")
+        self.subheader.setFont(QFont("Arial", 14))
+        title_layout.addWidget(self.subheader)
+
+        header_layout.addLayout(title_layout)
+        header_layout.addStretch()
+        layout.addLayout(header_layout)
+
+        # --- AUTOMATION INTERFACE ACTIONS (All anchored to your active root folder) ---
+        self.btn_deps = QPushButton("📦 Step1: Automatically Verify And Install Build Dependencies")
+        self.btn_deps.clicked.connect(self.run_dependencies)
+        layout.addWidget(self.btn_deps)
+
+        self.btn_stage = QPushButton("🌱 Build New Version Source Tree (stage_release_build.sh)")
+        self.btn_stage.clicked.connect(self.run_stage_release)
+        layout.addWidget(self.btn_stage)
+
+        self.btn_forge = QPushButton("🗜️ Build Multi-Architecture Portable Folders (x86_64 / V3 / V4)")
+        self.btn_forge.clicked.connect(self.run_multi_forge)
+        layout.addWidget(self.btn_forge)
+
+        self.btn_install = QPushButton("🌌 Install System-Wide (arch_install.sh)")
+        self.btn_install.clicked.connect(self.run_arch_install)
+        layout.addWidget(self.btn_install)
+
+        # --- LIVE SYSTEM TERMINAL OUTPUT VIEW ---
+        self.console_label = QLabel("📟 Live Execution Output Log Tracker:")
+        self.console_label.setFont(QFont("Arial", 14, QFont.Weight.Bold))
+        layout.addWidget(self.console_label)
+
+        self.console = QTextEdit()
+        self.console.setReadOnly(True)
+        self.console.setFont(QFont("Monospace", 14))
+        # 🎨 Set the background to solid black and the text foreground to solid white
+        self.console.setStyleSheet("background-color: #000000; color: #ffffff; border: 1px solid #333333;")
+        layout.addWidget(self.console)
+
+        self.setLayout(layout)
+
+    def append_log(self, text):
+        self.console.insertPlainText(text)
+        self.console.ensureCursorVisible()
+
+    def run_dependencies(self):
+        dep_script_path = os.path.join(self.script_dir, "install_deps_tmp.sh")
+        with open(dep_script_path, "w") as f:
+            f.write("#!/bin/bash\n")
+            f.write("echo '📥 Syncing package databases and querying required dependencies...'\n")
+            f.write("pacman -S --needed --noconfirm base-devel cmake freeglut wayland wayland-protocols python-pyqt6 python-dbus spectacle glu pkgconf gcc\n")
+            f.write("echo '✅ Core dependencies verified! Press Enter to exit.'\n")
+            f.write("read\n")
+
+        os.chmod(dep_script_path, 0o755)
+        self.console.clear()
+        self.append_log("🚀 Initiating dependency installation...\n")
+        self.process = QProcess()
+        self.process.setWorkingDirectory(self.root_dir)
+        self.process.setProcessChannelMode(QProcess.ProcessChannelMode.MergedChannels)
+        self.process.readyReadStandardOutput.connect(
+            lambda: self.append_log(self.process.readAllStandardOutput().data().decode(errors='ignore'))
+        )
+        # Dynamically launches their native terminal choice to execute the script!
+        self.process.start(self.term, ["-e", "sudo", dep_script_path])
+
+    def run_stage_release(self):
+        self.append_log("🚀 Initiating dynamic staging version scan and building new source tree version...\n")
+        self.process = QProcess()
+        self.process.setWorkingDirectory(self.root_dir)
+
+        # Smart execution flag handler based on whether the terminal accepts standard GNU arguments
+        args = ["--hold", "-e", os.path.join(self.root_dir, "stage_release_build.sh")]
+        if self.term in ["alacritty", "kitty", "foot"]:
+            args = ["-e", "bash", "-c", f"{os.path.join(self.root_dir, 'stage_release_build.sh')}; read"]
+
+        self.process.start(self.term, args)
+
+    def run_multi_forge(self):
+        self.append_log("🚀 Spawning interactive hardware-gated architecture compilation environment...\n")
+        self.process = QProcess()
+        self.process.setWorkingDirectory(self.root_dir)
+
+        args = ["--hold", "-e", os.path.join(self.root_dir, "build_multi_arch.sh")]
+        if self.term in ["alacritty", "kitty", "foot"]:
+            args = ["-e", "bash", "-c", f"{os.path.join(self.root_dir, 'build_multi_arch.sh')}; read"]
+
+        self.process.start(self.term, args)
+
+    def run_arch_install(self):
+        self.append_log("🚀 Initiating system installer...\n")
+        self.process = QProcess()
+        self.process.setWorkingDirectory(self.root_dir)
+
+        args = ["--hold", "-e", os.path.join(self.root_dir, "arch_install.sh")]
+        if self.term in ["alacritty", "kitty", "foot"]:
+            args = ["-e", "bash", "-c", f"{os.path.join(self.root_dir, 'arch_install.sh')}; read"]
+
+        self.process.start(self.term, args)
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = KCometenBuildMaster()
+    window.show()
+    sys.exit(app.exec())
