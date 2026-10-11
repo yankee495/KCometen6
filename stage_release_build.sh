@@ -155,13 +155,14 @@ if [ -f "${NEW_SRC_TREE}/PKGBUILD" ]; then
   sed -i "s/^pkgver=.*/pkgver=${TARGET_VERSION}/" "${NEW_SRC_TREE}/PKGBUILD"
   echo "✅ Master PKGBUILD version updated to: ${TARGET_VERSION}"
 
-  # Track B: Let Arch rewrite the entire .SRCINFO file!
-  echo "📊 Generating pristine, synchronized .SRCINFO metadata sheet..."
+# 🔍 UNIVERSAL CHECK: Only execute Arch-specific commands if makepkg is available
+if command -v makepkg &> /dev/null; then
+    echo "📦 Arch utility detected. Regenerating tracking .SRCINFO layer..."
+    (cd "${NEW_SRC_TREE}" && makepkg --printsrcinfo > .SRCINFO)
+else
+    echo "ℹ️  Non-Arch system platform detected. Safely bypassing .SRCINFO generation."
+  fi
 
-  # The parentheses ( ) temporarily step inside the folder to run the tool cleanly
-  (cd "${NEW_SRC_TREE}" && makepkg --printsrcinfo > .SRCINFO)
-
-  echo "🎉 SUCCESS: All spaced paths and tarball filenames are auto-patched!"
 fi
 
 echo "[3/3] Performing structural integrity pass..."
