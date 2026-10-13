@@ -244,19 +244,65 @@ int main(int argc, char** argv) {
         std::cout << "[SUCCESS] Native C++ binary took an authorized desktop snapshot to /tmp/kcometen/" << std::endl;
     }
 
-    // Initialize the GLUT engine window wrapper context properties
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+     // Initialize the GLUT engine window wrapper context properties
+//     glutInit(&argc, argv);
+//     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+//
+//    int screen_w = glutGet(GLUT_SCREEN_WIDTH);
+//    int screen_h = glutGet(GLUT_SCREEN_HEIGHT);
+//    int boxWidth = (screen_w > 0) ? screen_w : 3840;
+//    int boxHeight = (screen_h > 0) ? screen_h : 2160;
+//
+//    glutInitWindowSize(boxWidth, boxHeight);
+//    int window_id = glutCreateWindow("KCometen6 Standalone");
+//    (void)window_id;
+//    glutFullScreen();
+//
+// Initialize the GLUT engine window wrapper context properties
+glutInit(&argc, argv);
+glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 
-    int screen_w = glutGet(GLUT_SCREEN_WIDTH);
-    int screen_h = glutGet(GLUT_SCREEN_HEIGHT);
-    int boxWidth = (screen_w > 0) ? screen_w : 3840;
-    int boxHeight = (screen_h > 0) ? screen_h : 2160;
+// 🕵️ SCAN FOR THE WINDOWED PARAMETER FLAG
+bool run_windowed = false;
+for (int i = 1; i < argc; ++i) {
+    if (std::string(argv[i]) == "-w" || std::string(argv[i]) == "--windowed") {
+        run_windowed = true;
+        break;
+    }
+}
 
+int screen_w = glutGet(GLUT_SCREEN_WIDTH);
+int screen_h = glutGet(GLUT_SCREEN_HEIGHT);
+int boxWidth = (screen_w > 0) ? screen_w : 3840;
+int boxHeight = (screen_h > 0) ? screen_h : 2160;
+
+if (run_windowed) {
+    // 🪟 WINDOWED CANVAS: Set an elegant 1080p frame for 4K screens, scale down for others
+    if (boxWidth >= 3840) {
+        boxWidth = 1920;
+        boxHeight = 1080;
+    } else {
+        boxWidth = static_cast<int>(boxWidth * 0.80);
+        boxHeight = static_cast<int>(boxHeight * 0.80);
+    }
+
+    glutInitWindowSize(boxWidth, boxHeight);
+
+    // Center the frame beautifully on the monitor workspace
+    int posX = (screen_w - boxWidth) / 2;
+    int posY = (screen_h - boxHeight) / 2;
+    glutInitWindowPosition(posX, posY);
+
+    int window_id = glutCreateWindow("KCometen6 Live Window");
+    (void)window_id;
+    // 🚀 Skip glutFullScreen() entirely so it remains windowed!
+} else {
+    // 🌌 SCREEN SAVER MODE: Lock absolute, pristine full screen
     glutInitWindowSize(boxWidth, boxHeight);
     int window_id = glutCreateWindow("KCometen6 Standalone");
     (void)window_id;
     glutFullScreen();
+}
 
     settings = new Settings();
 

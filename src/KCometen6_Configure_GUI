@@ -54,7 +54,9 @@ class KCometenConfigurator(QWidget):
 
             # PERFORMANCE ENHANCEMENTS SELECTIONS:
             "maxFps": "60",
-            "mipmaps": "false"
+            "mipmaps": "false",
+            # 🪟 WINDOW CANVAS SETTING COOKIE FALLBACK:
+            "windowMode": "False"
         }
 
     def load_config(self):
@@ -68,13 +70,15 @@ class KCometenConfigurator(QWidget):
 #   btn_preview.clicked.connect(lambda: [self.save_config(), os.system(f"{ENGINE_BIN} &")])
 #                                               os.system(f"\"{IDLE_BIN}\" {seconds_val} &")
     def save_config(self):
-        # 1. Capture the Active Screensaver Toggles from the Live Interface Layout
+        # 1. Capture the Active Screensaver and Layout Toggles from the Live Interface Layout
         screensaver_enabled = self.cb_screensaver.isChecked()
         timeout_minutes = self.timeout_slider.value()
+        window_mode_enabled = self.chk_window_mode.isChecked() # 💡 RECOVERED LINK
 
         # FIXED LOGIC MATRIX: Explicitly flips the string key state for total manual editing clarity!
         self.settings["useSystemdScreensaver"] = "true" if screensaver_enabled else "false"
         self.settings["screensaverTimeout"] = str(timeout_minutes)
+        self.settings["windowMode"] = "True" if window_mode_enabled else "False" # 💡 RECOVERED WRITER KEY
 
         # 2. Write out the core portable settings profile to your text file layout
         with open(CONFIG_PATH, "w") as f:
@@ -86,7 +90,6 @@ class KCometenConfigurator(QWidget):
         if screensaver_enabled:
             seconds_val = int(timeout_minutes * 60)
             os.system("pkill -f kcometen6_idle >/dev/null 2>&1")
-            # Wraps the IDLE_BIN variable path in escaped quotes so spaces never break execution!
             os.system(f"\"{IDLE_BIN}\" {seconds_val} &")
             print(f"[SUCCESS] Native kcometen6_idle companion process launched for {timeout_minutes} minute(s).")
         else:
@@ -328,6 +331,16 @@ class KCometenConfigurator(QWidget):
         self.color_combo.currentIndexChanged.connect(lambda idx: self.settings.update({"colorMode": str(idx)}))
         feat_layout.addWidget(self.color_combo)
 
+        # 🪟 Add the new Window Mode toggle checkbox
+        feat_layout.addSpacing(15)
+        self.chk_window_mode = QCheckBox("Enable Window Mode")
+        self.chk_window_mode.setToolTip("Launches the Preview engine inside a standard desktop window instead of full screen.")
+
+        # 🔗 DIRECT DICTIONARY LINK: Evaluates True/False keys and binds to toggled click loops
+        self.chk_window_mode.setChecked(self.settings.get("windowMode", "False") == "True")
+        self.chk_window_mode.toggled.connect(lambda checked: self.settings.update({"windowMode": "True" if checked else "False"}))
+        feat_layout.addWidget(self.chk_window_mode)
+
                 # INJECT THESE SHORT LIGHTWEIGHT CONTROLS:
         feat_layout.addSpacing(15)
 
@@ -359,7 +372,7 @@ class KCometenConfigurator(QWidget):
         info_group = QGroupBox("System Runtime Instructions")
         info_layout = QVBoxLayout()
         info_text = (
-            "• Portable Execution: Unpack this folder anywhere and run kcometen6_run. Use ESC to exit.\n\n"
+            "• Portable Execution: Unpack this folder anywhere and run kcometen6_run. Use ESC to exit full screen mode.\n\n"
             "• Use the Launch Button to experiment with settings.\n\n"
             "• Running Mode Option: Check Enable Idle Screensaver Mode and set the delay timer.  It'll run like a screensaver leaving your Power Management options in effect.  User activity will close the screensaver."
         )
@@ -383,11 +396,15 @@ class KCometenConfigurator(QWidget):
         btn_layout.addWidget(btn_save)
 
         # PROGRESSIVE ORDER: Apply | Preview | Make Portable | Exit
-        # Automatically saves live slider keys to settings.conf before starting main
+        # Automatically saves live configurations and cleanly sets the runtime flags
         btn_preview = QPushButton("Preview")
         btn_preview.setToolTip("Launch live 3D comet visualization preview window.")
-        btn_preview.clicked.connect(lambda: [self.save_config(), os.system(f"\"{ENGINE_BIN}\" &")])
+        btn_preview.clicked.connect(lambda: [
+            self.save_config(),
+            os.system(f"\"{ENGINE_BIN}\" -w &" if self.settings.get("windowMode", "False") == "True" else f"\"{ENGINE_BIN}\" &")
+        ])
         btn_layout.addWidget(btn_preview)
+
 
 #   btn_preview.clicked.connect(lambda: [self.save_config(), os.system(f"{ENGINE_BIN} &")])
 #                                               os.system(f"\"{IDLE_BIN}\" {seconds_val} &")

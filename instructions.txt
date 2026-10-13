@@ -42,8 +42,14 @@ makepkg -C -s -i -c
 
 
 
-git clone https://github.com/yankee495/KCometen6
+git clone https:||github.com|yankee495|KCometen6
 
+https:||github.com|yankee495|KCometen6|blob|main|PKGBUILD
 
+curl -o PKGBUILD https://github.com/yankee495/KCometen6/blob/fe24c7816bf11dbcb032e4e42e32437dfc698222/PKGBUILD
+
+PKGBUILD
+
+https://github.com/yankee495/KCometen6/blob/fe24c7816bf11dbcb032e4e42e32437dfc698222/PKGBUILD
 Uninstall:
 sudo pacman -R kcometen6
