@@ -8,7 +8,6 @@
  * Added Window Mode to binaries and Configuration GUI on Tab 3.
    If you check Window Mode and Screensaver Mode then hit Preview and wait 1 minute (however long you have set), it’ll kill the window and start a new instance when the screensaver delay timer runs out. Without checking Screensaver mode and using only Window Mode, it’ll just run until you kill it or power management takes over.
 
-  * Added a delay for Hyprland user activity detection in Screensaver Mode which was killing the screensaver as soon as it started.
 
 <br>
 ## ✨ Information
