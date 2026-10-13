@@ -1,9 +1,14 @@
-# KCometen6 Standalone Portable 3D Screensaver (v1.0.4)
+# KCometen6 Standalone Portable 3D Screensaver (v1.0.6)
 <br>
 ### The New KCometen6 Build & Deploy GUI
 🚀 **Want a quick, command-line-free setup on CachyOS & Arch Linux?** 
 
 [Click here to jump straight to the One-Click Build & Deploy GUI Method](#The-New-KCometen6-Build-And-Deploy-GUI)
+
+ * Added Window Mode to binaries and Configuration GUI on Tab 3.
+   If you check Window Mode and Screensaver Mode then hit Preview and wait 1 minute (however long you have set), it’ll kill the window and start a new instance when the screensaver delay timer runs out. Without checking Screensaver mode and using only Window Mode, it’ll just run until you kill it or power management takes over.
+
+  * Added a delay for Hyprland user activity detection in Screensaver Mode which was killing the screensaver as soon as it started.
 
 <br>
 ## ✨ Information
