@@ -10,7 +10,7 @@ Version 1.0.6
 
 Version 1.0.4
 
- the KCometen6_Build_GUI which has many features including Install Dependancies, Build New Source tree, Build Multi-architecture Portable Folders and Install System-wide using Pacman.
+  * Added the KCometen6_Build_GUI which has many features including Install Dependancies, Build New Source tree, Build Multi-architecture Portable Folders and Install System-wide using Pacman.
 
   INSTALL THE REQUIRED RUNTIME DEPENDENCIES
 
