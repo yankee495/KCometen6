@@ -11,7 +11,6 @@
 #include <string>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <chrono>
 
 extern "C" {
     #include <wayland-client.h>
@@ -41,9 +40,6 @@ struct ext_idle_notification_v1 *idle_notification = nullptr;
 
 int timeout_seconds = 60;
 bool is_idle = false;
-
-// ⏱️ The launch clock tracker for Hyprland:
-static std::chrono::steady_clock::time_point launch_time;
 
 // HELPER FUNCTION: Safely checks if the desktop session lock screen is currently active
 bool is_screen_locked() {
@@ -91,8 +87,8 @@ static void handle_idled(void *data, struct ext_idle_notification_v1 *notificati
             return;
         }
 
-        //       std::cout << "[IDLE NOTIFY] Input inactivity threshold breached! Launching comets..." << std::endl;
-        std::cout << "[IDLE NOTIFY] Input inactivity threshold breached! Launching comets..." << std::endl;
+//       std::cout << "[IDLE NOTIFY] Input inactivity threshold breached! Launching comets..." << std::endl;
+         std::cout << "[IDLE NOTIFY] Input inactivity threshold breached! Launching comets..." << std::endl;
 
         // 🛠️ THE FIX: Wipe out any running windowed preview instances first!
         // This drops the [SYSTEM PROTECTION] roadblock right before we launch full-screen.
@@ -119,10 +115,6 @@ static void handle_idled(void *data, struct ext_idle_notification_v1 *notificati
 
         int status = std::system(execute_cmd.c_str());
         (void)status;
-
-        // ⏱️ STAMP THE LAUNCH CLOCK: Capture the exact millisecond the comets ignite
-        launch_time = std::chrono::steady_clock::now();
-
         is_idle = true;
     }
 }
@@ -130,18 +122,7 @@ static void handle_idled(void *data, struct ext_idle_notification_v1 *notificati
 // CALLBACK 2: Executed by KWin the exact microsecond you wiggle the mouse or touch a key!
 static void handle_resumed(void *data, struct ext_idle_notification_v1 *notification) {
     if (is_idle) {
-        // 🔍 HYPRLAND FOCUS INTERCEPTOR:
-        auto current_time = std::chrono::steady_clock::now();
-        auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - launch_time).count();
-
-        // 🛡️ THE 250ms FILTER: If an input strikes instantly at launch, drop it as window-mapping noise!
-        if (elapsed_ms < 250) {
-            std::cout << "[HYPRLAND BYPASS] Ignored synthetic surface mapping focus event ("
-            << elapsed_ms << "ms elapsed)." << std::endl;
-            return;
-        }
-
-        std::cout << "[ACTIVITY] Genuine user input detected. Squelching active visual nodes..." << std::endl;
+        std::cout << "[ACTIVITY] User input detected. Squelching active visual nodes..." << std::endl;
         int status = std::system("pkill -x kcometen6_run");
         (void)status;
         is_idle = false;
