@@ -1,6 +1,6 @@
 # Maintainer: John (Yankee)
 pkgname=kcometen6
-pkgver=1.0.6
+pkgver=1.0.7
 pkgrel=1
 pkgdesc="Standalone Wayland 3D particle screensaver & comet engine (KCometen4 revival)"
 arch=('x86_64')

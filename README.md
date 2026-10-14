@@ -1,13 +1,18 @@
-# KCometen6 Standalone Portable 3D Screensaver (v1.0.6)
+# KCometen6 Standalone Portable 3D Screensaver (v1.0.7)
 <br>
 ### The New KCometen6 Build & Deploy GUI
 🚀 **Want a quick, command-line-free setup on CachyOS & Arch Linux?** 
 
 [Click here to jump straight to the One-Click Build & Deploy GUI Method](#The-New-KCometen6-Build-And-Deploy-GUI)
 
+Version 1.0.7
+
+ * Added user selectable screenshot utility to the Configuration GUI to accommodate Hyprland and others.
+   Modified main to allow a user selectable screenshot utility. 
+
+Version 1.0.6
  * Added Window Mode to binaries and Configuration GUI on Tab 3.
    If you check Window Mode and Screensaver Mode then hit Preview and wait 1 minute (however long you have set), it’ll kill the window and start a new instance when the screensaver delay timer runs out. Without checking Screensaver mode and using only Window Mode, it’ll just run until you kill it or power management takes over.
-
 
 <br>
 ## ✨ Information
@@ -169,5 +174,7 @@ Here is the optimized, unchained 150-comet heavy particle storm running natively
 ![Tab 2 - Custom Image Selection and Dimension Guidelines](kcometen6_configuration_panel_tab2.png)
 
 ![Tab 3 - Core Features and Screensaver Idle Daemon Setup](kcometen6_configuration_panel_tab3.png)
+
+![Tab 4 - User Selectable Screenshot Utility](kcometen6_configuration_panel_tab4.png)
 
 

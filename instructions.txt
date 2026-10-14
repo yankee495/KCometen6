@@ -14,6 +14,7 @@ build_multi_arch.sh
 
 stage_release_build.sh
 
+
 The GUI automatically increments the version to the next one up, v1.0.3 becomes v1.0.4 and it dynamically updates the .SRCINFO & PKGBUILD to 1.0.4.
 
 Terminal options are still available:
@@ -44,12 +45,7 @@ makepkg -C -s -i -c
 
 git clone https:||github.com|yankee495|KCometen6
 
-https:||github.com|yankee495|KCometen6|blob|main|PKGBUILD
-
-curl -o PKGBUILD https://github.com/yankee495/KCometen6/blob/fe24c7816bf11dbcb032e4e42e32437dfc698222/PKGBUILD
 
 PKGBUILD
 
-https://github.com/yankee495/KCometen6/blob/fe24c7816bf11dbcb032e4e42e32437dfc698222/PKGBUILD
-Uninstall:
 sudo pacman -R kcometen6

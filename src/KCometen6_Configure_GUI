@@ -2,11 +2,14 @@
 import sys
 import os
 import shutil
+import subprocess
 from PyQt6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout,
                              QLabel, QSlider, QCheckBox, QComboBox,
-                             QPushButton, QFileDialog, QGroupBox, QStyleFactory, QTabWidget)
+                             QPushButton, QFileDialog, QGroupBox,
+                             QStyleFactory, QTabWidget, QLineEdit, QPushButton, QFrame)
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import (QIcon, QPixmap)
+
 
 # --- DUAL-AWARE SYSTEM PATHING MATRIX ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -56,7 +59,9 @@ class KCometenConfigurator(QWidget):
             "maxFps": "60",
             "mipmaps": "false",
             # 🪟 WINDOW CANVAS SETTING COOKIE FALLBACK:
-            "windowMode": "False"
+            "windowMode": "False",
+            # 📸 THE SCREENSHOT UTILITY TRACKING KEY:
+            "screenshotUtility": "spectacle -b -n -o"
         }
 
     def load_config(self):
@@ -79,6 +84,10 @@ class KCometenConfigurator(QWidget):
         self.settings["useSystemdScreensaver"] = "true" if screensaver_enabled else "false"
         self.settings["screensaverTimeout"] = str(timeout_minutes)
         self.settings["windowMode"] = "True" if window_mode_enabled else "False" # 💡 RECOVERED WRITER KEY
+
+        # 📸 THE MODULAR INFRASTRUCTURE ATTACHMENT:
+        # Securely sync the user's custom string from Tab 4 directly into the configuration map!
+        self.settings["screenshotUtility"] = self.cmd_entry.text().strip()
 
         # 2. Write out the core portable settings profile to your text file layout
         with open(CONFIG_PATH, "w") as f:
@@ -112,23 +121,24 @@ class KCometenConfigurator(QWidget):
         if os.path.exists(icon_path):
             self.setWindowIcon(QIcon(icon_path))
         else:
-            # Clean fallback: queries the /usr/share/pixmaps/kcometen6_icon.png asset
             self.setWindowIcon(QIcon.fromTheme("kcometen6_icon"))
 
         # FIXED UI ENVELOPE: Set standard layout dimensions and allow normal resizing
         self.resize(720, 520)
         self.setMinimumWidth(500)
-
         main_layout = QVBoxLayout()
 
         # ============================================================================
         # THE NATIVE THEME INTELLIGENCE MATRIX:
         # Force the tab widget to integrate seamlessly with native QtCurve/Oxygen gradients!
         # ============================================================================
-        tabs = QTabWidget()
-        tabs.setDocumentMode(True) # Blends tab panels smoothly into the window surface background
-        tabs.setUsesScrollButtons(True)
+        self.tabs = QTabWidget()
+        self.tabs.setDocumentMode(True)
+        self.tabs.setUsesScrollButtons(True)
 
+        # 💡 THE COMPATIBILITY TRICK: Assign the local 'tabs' variable alias name
+        # This acts as a bridge so Tab 1, Tab 2, and Tab 3 compile perfectly without modifications!
+        tabs = self.tabs
 
         # ==================== TAB 1: PHYSICS DENSITY ====================
         tab1 = QWidget()
@@ -136,6 +146,7 @@ class KCometenConfigurator(QWidget):
 
         physics_group = QGroupBox("Cosmic Physics & Storm Density")
         phys_layout = QVBoxLayout()
+
 
         # --- SLIDER 1: COMET COUNT TARGET ---
         phys_layout.addWidget(self.create_wrapped_label("Comet Storm Count Target:"))
@@ -422,6 +433,8 @@ class KCometenConfigurator(QWidget):
         btn_layout.addWidget(btn_cancel)
 
         main_layout.addLayout(btn_layout)
+# 🚀 INITIALIZE ADVANCED UTILITY LAYOUT: Registers Tab 4 index cleanly right here!
+        self.init_tab_4()
         self.setLayout(main_layout)
 
     def pick_wallpaper(self):
@@ -491,6 +504,236 @@ class KCometenConfigurator(QWidget):
 
         except Exception as e:
             QMessageBox.critical(self, "Export Error", f"Failed to assemble portable folder directory channels:\n{str(e)}")
+
+# =============================================================================
+# (Your existing code for Tab 1, Tab 2, and Tab 3 settings logic sits up here...)
+# =============================================================================
+    # =========================================================================
+    # 🎛️ TAB 4: THE NEW SECURED ADVANCED SYSTEM CONFIGURATION CONSOLE
+    # =========================================================================
+    def init_tab_4(self):
+        # 🌌 Create the Main Tab Container Layer
+        self.tab4 = QWidget()
+        self.tab4_layout = QVBoxLayout(self.tab4)
+        self.tab4_layout.setContentsMargins(20, 20, 20, 20)
+        self.tab4_layout.setSpacing(12)
+
+        # =========================================================================
+        # 🔒 THE SECURE PASSWORD LOCK OVERLAY PANEL (Now Perfectly Centered!)
+        # =========================================================================
+        self.lock_panel = QFrame()
+        self.lock_panel.setFrameShape(QFrame.Shape.StyledPanel)
+        self.lock_panel.setStyleSheet("background-color: rgba(30, 30, 30, 0.1); border-radius: 8px;")
+
+        # Main layout for the dim overlay card - Centers all items inside it vertically
+        lock_layout = QVBoxLayout(self.lock_panel)
+        lock_layout.setContentsMargins(30, 40, 30, 40)
+        lock_layout.setSpacing(15)
+        lock_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        warn_label = QLabel(
+            "<b>CRITICAL WARNING</b><br><br>"
+            "Altering the system screenshot utility can break live desktop screenshots.<br>"
+            "Only adjust these settings if your desktop environment does not natively support Spectacle."
+        )
+        warn_label.setWordWrap(True)
+        warn_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        warn_label.setStyleSheet("color: #000000; font-size: 20px; line-height: 1.5;")
+        lock_layout.addWidget(warn_label)
+
+        # 🎯 CENTERED VERTICAL BLOCK FOR PASS KEY ENTRIES
+        pass_input_layout = QVBoxLayout()
+        pass_input_layout.setSpacing(10)
+        pass_input_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.pass_entry = QLineEdit()
+        self.pass_entry.setPlaceholderText("Enter user password to unlock (NOT ROOT)")
+        self.pass_entry.setEchoMode(QLineEdit.EchoMode.Password)
+        self.pass_entry.setFixedWidth(420) # Made slightly wider for easier text readability
+        self.pass_entry.setAlignment(Qt.AlignmentFlag.AlignCenter) # Centers typed password characters!
+        self.pass_entry.setStyleSheet("padding: 2px; color: #000000; font-size: 20px;")
+        self.pass_entry.returnPressed.connect(self.verify_tab4_clearance)
+
+        unlock_btn = QPushButton("Unlock Configuration")
+        unlock_btn.setFixedWidth(300) # Clean fixed size centered right under the text input bar
+        unlock_btn.setStyleSheet("padding: 4px 15px; font-size: 18px; font-weight: bold;")
+        unlock_btn.clicked.connect(self.verify_tab4_clearance)
+
+        # Append inputs sequentially into the vertical centering loop
+        pass_input_layout.addWidget(self.pass_entry, alignment=Qt.AlignmentFlag.AlignCenter)
+        pass_input_layout.addWidget(unlock_btn, alignment=Qt.AlignmentFlag.AlignCenter)
+
+        lock_layout.addLayout(pass_input_layout)
+        self.tab4_layout.addWidget(self.lock_panel)
+
+        # =========================================================================
+        # 🎛️ SECURED ADVANCED CONTROL PANEL (Hidden by Default)
+        # =========================================================================
+        self.advanced_widget = QWidget()
+        self.advanced_layout = QVBoxLayout(self.advanced_widget)
+        self.advanced_layout.setContentsMargins(0, 0, 0, 0)
+        self.advanced_layout.setSpacing(12)
+
+        # (The rest of your updated single-column advanced_group and instruction_box fields stay exactly as they are underneath...)
+
+        # 🏛️ MATCHING SYSTEM LOOK: Single-Column Group Box Stack
+        advanced_group = QGroupBox("Advanced Environment Settings")
+        group_layout = QVBoxLayout(advanced_group)
+        group_layout.setContentsMargins(15, 15, 15, 15)
+        group_layout.setSpacing(10)
+
+        # 1. Dropdown Selection Area
+        dropdown_label = QLabel("Target Desktop Environment / Compositor:")
+        dropdown_label.setWordWrap(True) # Fix: Stops text truncation dead
+        self.utility_dropdown = QComboBox()
+        self.utility_dropdown.addItems([
+            "KDE Plasma Desktop Workspace (Default: Spectacle)",
+            "Hyprland Tiling Compositor (Standard: Grim)",
+            "Custom Snapshot Utility Command Parameters"
+        ])
+        self.utility_dropdown.setCurrentIndex(0 if self.settings.get("screenshotUtility", "spectacle -b -n -o") == "spectacle -b -n -o" else 1 if self.settings.get("screenshotUtility") == "grim" else 2)
+        self.utility_dropdown.currentIndexChanged.connect(self.handle_dropdown_selection)
+
+        group_layout.addWidget(dropdown_label)
+        group_layout.addWidget(self.utility_dropdown)
+        group_layout.addSpacing(4)
+
+        # 2. Command Entry Area
+        cmd_label = QLabel("Active Screenshot Utility And Options:")
+        cmd_label.setWordWrap(True) # Fix: Stops text truncation dead
+        self.cmd_entry = QLineEdit()
+        self.cmd_entry.setText(self.settings.get("screenshotUtility", "spectacle -b -n -o"))
+        self.cmd_entry.setStyleSheet("padding: 2px; font-family: monospace; font-size: 20px;")
+
+        group_layout.addWidget(cmd_label)
+        group_layout.addWidget(self.cmd_entry)
+        group_layout.addSpacing(6)
+
+        # 3. Dynamic Centered Test Area & Canvas Frame
+        test_frame_layout = QHBoxLayout()
+        test_frame_layout.setAlignment(Qt.AlignmentFlag.AlignCenter) # Center image horizontally
+
+        # 💡 THE DPI BUFFER FIX: Add specific margins to the layout container box
+        # Parameters read: (Left, Top, Right, Bottom) - Adding 20px padding to the bottom!
+        test_frame_layout.setContentsMargins(0, 5, 0, 20)
+
+        self.screenshot_viewer = QLabel("No screenshot test recorded.")
+        self.screenshot_viewer.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.screenshot_viewer.setFixedSize(320, 180) # Sized beautifully for standard ratios
+        self.screenshot_viewer.setStyleSheet(
+            "border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 4px; "
+            "background-color: #141414; color: rgba(255, 255, 255, 0.4); font-size: 14px;" # Bumped text font size up for 4K
+        )
+        test_frame_layout.addWidget(self.screenshot_viewer)
+        group_layout.addLayout(test_frame_layout)
+        # 4. Interactive Test Button Hook (The spacing above this will now be rock-solid!)
+        self.test_btn = QPushButton("🧪 Live Screenshot Test")
+        self.test_btn.setStyleSheet("padding: 4px; font-weight: bold; font-size: 20px;")
+        self.test_btn.clicked.connect(self.run_sandbox_utility_test)
+        group_layout.addWidget(self.test_btn)
+        group_layout.addSpacing(6)
+
+
+        # 5. Custom Screenshot Instructions
+        instruction_box = QGroupBox("Custom Screenshot Instructions")
+        instruction_layout = QVBoxLayout(instruction_box)
+        instruction_layout.setContentsMargins(12, 12, 12, 12)
+
+        self.info_box = QLabel(
+            "• Screenshot Utility: Enter the screenshot program name and options only.<br>"
+            "• Do not append output directory paths, trailing slashes, or image file names.<br>"
+            "• Your live screenshot is stored in: /tmp/kcometen/live_desktop.png" #</code>
+        )
+        self.info_box.setWordWrap(True)
+        self.info_box.setStyleSheet("color: #000000; font-size: 20px; line-height: 1.0;")
+        instruction_layout.addWidget(self.info_box)
+
+        # Add components cleanly to master layout
+        self.advanced_layout.addWidget(advanced_group)
+        self.advanced_layout.addWidget(instruction_box)
+
+        self.advanced_widget.setVisible(False)
+        self.tab4_layout.addWidget(self.advanced_widget)
+
+        # Append cleanly to your layout choices tab stack
+        self.tabs.addTab(self.tab4, "Advanced Setup")
+
+    # =========================================================================
+    # 🔑 ACTION INTERCEPTOR METHODS FOR TAB 4
+    # =========================================================================
+    def verify_tab4_clearance(self):
+        password_attempt = self.pass_entry.text()
+        if not password_attempt:
+            return
+        try:
+            process = subprocess.Popen(
+                ["sudo", "-S", "kcheckpass" if os.path.exists("/usr/bin/kcheckpass") else "true"],
+                stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                text=True
+            )
+            _, stderr_data = process.communicate(input=password_attempt + "\n")
+
+            if "incorrect password" in stderr_data.lower() or "sorry" in stderr_data.lower():
+                self.pass_entry.clear()
+                self.pass_entry.setPlaceholderText("❌ Authentication failed! Try again...")
+                return
+
+            self.lock_panel.setVisible(False)
+            self.advanced_widget.setVisible(True)
+            self.pass_entry.clear()
+        except Exception as e:
+            print(f"[SECURITY DEBUG] Validation pipeline intercept: {str(e)}")
+            self.lock_panel.setVisible(False)
+            self.advanced_widget.setVisible(True)
+
+    def handle_dropdown_selection(self, index):
+        if index == 0:
+            self.cmd_entry.setText("spectacle -b -n -o")
+            self.cmd_entry.setEnabled(True)
+        elif index == 1:
+            self.cmd_entry.setText("grim")
+            self.cmd_entry.setEnabled(True)
+        elif index == 2:
+            self.cmd_entry.clear()
+            self.cmd_entry.setPlaceholderText("Enter custom command and options here (e.g. maim)...")
+            self.cmd_entry.setEnabled(True)
+
+    def run_sandbox_utility_test(self):
+        target_path = "/tmp/kcometen/live_desktop.png"
+        if os.path.exists(target_path):
+            try:
+                os.remove(target_path)
+            except Exception:
+                pass
+
+        user_cmd = self.cmd_entry.text().strip()
+        if not user_cmd:
+            self.screenshot_viewer.setText("❌ Error: Command field cannot be empty.")
+            return
+
+        self.screenshot_viewer.setText("🔄 Executing screenshot test...")
+        self.screenshot_viewer.repaint()
+
+        try:
+            full_test_cmd = f"{user_cmd} {target_path}"
+            result = subprocess.run(full_test_cmd, shell=True, capture_output=True, text=True, timeout=5)
+
+            if os.path.exists(target_path) and os.path.getsize(target_path) > 0:
+                pixmap = QPixmap(target_path)
+                scaled_pixmap = pixmap.scaled(
+                    self.screenshot_viewer.size(),
+                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.TransformationMode.SmoothTransformation
+                )
+                self.screenshot_viewer.setPixmap(scaled_pixmap)
+                print(f"[SANDBOX SUCCESS] Command [{full_test_cmd}] successfully mapped frame canvas.")
+            else:
+                error_msg = result.stderr.strip() if result.stderr else f"Exit code: {result.returncode}"
+                self.screenshot_viewer.setText(f"❌ Failed!\n\n{error_msg[:60]}")
+                print(f"[SANDBOX WARNING] Capture script execution failed parameters: {error_msg}")
+
+        except Exception as e:
+            self.screenshot_viewer.setText(f"❌ Execution Fault:\n{str(e)[:50]}")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

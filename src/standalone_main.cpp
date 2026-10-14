@@ -29,6 +29,9 @@ std::string g_bg_path = "";
 std::string g_custom_ceiling_path = "";
 std::string g_custom_floor_path = "";
 
+// 📡 Global environment screenshot utility
+std::string g_screenshot_utility = ""; //"spectacle -b -n -o"; // Default fallback
+
 // FORCE TRUE 5-SLOT HARDWARE TEXTURE ARRAY TRACKS:
 GLuint g_textures[5] = {0, 0, 0, 0, 0};
 CometenScene* g_scene = nullptr;
@@ -216,6 +219,10 @@ int main(int argc, char** argv) {
         return 0;
     }
 
+    // 💡 ALLOCATE THE SETTINGS STRUCT IMMEDIATELY AT START (THE CRASH FIX)
+    // This gives your parser a real memory buffer to write into, killing the SegFault!
+    settings = new Settings();
+
     // 2. INITIALIZE GLOBAL PATH VECTOR FIRST
     g_bg_path = "/tmp/kcometen/live_desktop.png";
 
@@ -233,79 +240,9 @@ int main(int argc, char** argv) {
         }
     }
 
-    std::cout << "[DEBUG] Executing automated desktop canvas capture..." << std::endl;
-    int status_dir = system("mkdir -p /tmp/kcometen");
-    (void)status_dir;
-
-    int status_shot = system("spectacle -b -n -o /tmp/kcometen/live_desktop.png");
-    if (status_shot != 0) {
-        std::cerr << "[WARNING] Spectacle capture execution failed! Falling back to cached layers..." << std::endl;
-    } else {
-        std::cout << "[SUCCESS] Native C++ binary took an authorized desktop snapshot to /tmp/kcometen/" << std::endl;
-    }
-
-     // Initialize the GLUT engine window wrapper context properties
-//     glutInit(&argc, argv);
-//     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-//
-//    int screen_w = glutGet(GLUT_SCREEN_WIDTH);
-//    int screen_h = glutGet(GLUT_SCREEN_HEIGHT);
-//    int boxWidth = (screen_w > 0) ? screen_w : 3840;
-//    int boxHeight = (screen_h > 0) ? screen_h : 2160;
-//
-//    glutInitWindowSize(boxWidth, boxHeight);
-//    int window_id = glutCreateWindow("KCometen6 Standalone");
-//    (void)window_id;
-//    glutFullScreen();
-//
-// Initialize the GLUT engine window wrapper context properties
-glutInit(&argc, argv);
-glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-
-// 🕵️ SCAN FOR THE WINDOWED PARAMETER FLAG
-bool run_windowed = false;
-for (int i = 1; i < argc; ++i) {
-    if (std::string(argv[i]) == "-w" || std::string(argv[i]) == "--windowed") {
-        run_windowed = true;
-        break;
-    }
-}
-
-int screen_w = glutGet(GLUT_SCREEN_WIDTH);
-int screen_h = glutGet(GLUT_SCREEN_HEIGHT);
-int boxWidth = (screen_w > 0) ? screen_w : 3840;
-int boxHeight = (screen_h > 0) ? screen_h : 2160;
-
-if (run_windowed) {
-    // 🪟 WINDOWED CANVAS: Set an elegant 1080p frame for 4K screens, scale down for others
-    if (boxWidth >= 3840) {
-        boxWidth = 1920;
-        boxHeight = 1080;
-    } else {
-        boxWidth = static_cast<int>(boxWidth * 0.80);
-        boxHeight = static_cast<int>(boxHeight * 0.80);
-    }
-
-    glutInitWindowSize(boxWidth, boxHeight);
-
-    // Center the frame beautifully on the monitor workspace
-    int posX = (screen_w - boxWidth) / 2;
-    int posY = (screen_h - boxHeight) / 2;
-    glutInitWindowPosition(posX, posY);
-
-    int window_id = glutCreateWindow("KCometen6 Live Window");
-    (void)window_id;
-    // 🚀 Skip glutFullScreen() entirely so it remains windowed!
-} else {
-    // 🌌 SCREEN SAVER MODE: Lock absolute, pristine full screen
-    glutInitWindowSize(boxWidth, boxHeight);
-    int window_id = glutCreateWindow("KCometen6 Standalone");
-    (void)window_id;
-    glutFullScreen();
-}
-
-    settings = new Settings();
-
+    // ============================================================================
+    // 💡 STEP A: READ THE CONFIG FILE FIRST (Moved up from below)
+    // ============================================================================
     // ============================================================================
     // DUAL-AWARE CONF PROFILE TEXT PARSER HOOK
     // ============================================================================
@@ -386,6 +323,11 @@ if (run_windowed) {
                         g_custom_floor_path = get_active_asset_path("default_floor_1920x1080.png");
                     }
                 }
+                // 📸 THE MODULAR INFRASTRUCTURE FIX: Read user selected screenshot utility straight from settings.conf
+                else if (key == "screenshotUtility") {
+                    g_screenshot_utility = val;
+                    // Note: Your val variable is already stripped of spaces by your parser layout above!
+                }
             }
         }
         cfile.close();
@@ -393,6 +335,96 @@ if (run_windowed) {
     } else {
         std::cout << "[INFO] Configuration profile file not found. Operating on baseline defaults." << std::endl;
     }
+    // ============================================================================
+    // 💡 STEP B: FIRE THE SCREENSHOT CAPTURE ENGINE SECOND
+    // ============================================================================
+    std::cout << "[DEBUG] Executing automated desktop canvas capture..." << std::endl;
+    int status_dir = system("mkdir -p /tmp/kcometen");
+    (void)status_dir;
+
+    unlink("/tmp/kcometen/live_desktop.png");
+
+    if (g_screenshot_utility.empty()) {
+        std::cout << "[INFO] Screenshot command is blank. Skipping live snapshot and utilizing cached asset states." << std::endl;
+    } else {
+        std::string full_constructed_cmd = g_screenshot_utility + " /tmp/kcometen/live_desktop.png";
+        std::cout << "[DEBUG] Shell Execution Command: [" << full_constructed_cmd << "]" << std::endl;
+
+        int raw_status = system(full_constructed_cmd.c_str());
+
+        int exit_code = 0;
+        if (raw_status != -1) {
+            #ifndef _WIN32
+            exit_code = WEXITSTATUS(raw_status);
+            #else
+            exit_code = raw_status;
+            #endif
+        } else {
+            exit_code = -1;
+        }
+
+        bool file_successfully_generated = file_exists_and_readable("/tmp/kcometen/live_desktop.png");
+
+        if (exit_code != 0 || !file_successfully_generated) {
+            std::cerr << "[WARNING] Capture execution failed! Falling back to cached layers..." << std::endl;
+
+            // 🖼️ THE DEFAULT WALL ALIGNMENT LINE:
+            // Forcefully redirect the background engine to your safe default texture asset!
+            g_bg_path = get_active_asset_path("default_walls_1920x1080.png"); // or your preferred default fallback filename
+        } else {
+            std::cout << "[SUCCESS] Native C++ binary took an authorized desktop snapshot to /tmp/kcometen/" << std::endl;
+            g_bg_path = "/tmp/kcometen/live_desktop.png";
+        }
+      }
+
+    // ============================================================================
+    // 💡 STEP C: INITIALIZE THE GLUT RUNTIME SYSTEM WINDOW (Keeps remaining setup pure)
+    // ============================================================================
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+
+// 🕵️ SCAN FOR THE WINDOWED PARAMETER FLAG
+bool run_windowed = false;
+for (int i = 1; i < argc; ++i) {
+    if (std::string(argv[i]) == "-w" || std::string(argv[i]) == "--windowed") {
+        run_windowed = true;
+        break;
+    }
+}
+
+int screen_w = glutGet(GLUT_SCREEN_WIDTH);
+int screen_h = glutGet(GLUT_SCREEN_HEIGHT);
+int boxWidth = (screen_w > 0) ? screen_w : 3840;
+int boxHeight = (screen_h > 0) ? screen_h : 2160;
+
+if (run_windowed) {
+    // 🪟 WINDOWED CANVAS: Set an elegant 1080p frame for 4K screens, scale down for others
+    if (boxWidth >= 3840) {
+        boxWidth = 1920;
+        boxHeight = 1080;
+    } else {
+        boxWidth = static_cast<int>(boxWidth * 0.80);
+        boxHeight = static_cast<int>(boxHeight * 0.80);
+    }
+
+    glutInitWindowSize(boxWidth, boxHeight);
+
+    // Center the frame beautifully on the monitor workspace
+    int posX = (screen_w - boxWidth) / 2;
+    int posY = (screen_h - boxHeight) / 2;
+    glutInitWindowPosition(posX, posY);
+
+    int window_id = glutCreateWindow("KCometen6 Live Window");
+    (void)window_id;
+    // 🚀 Skip glutFullScreen() entirely so it remains windowed!
+} else {
+    // 🌌 SCREEN SAVER MODE: Lock absolute, pristine full screen
+    glutInitWindowSize(boxWidth, boxHeight);
+    int window_id = glutCreateWindow("KCometen6 Standalone");
+    (void)window_id;
+    glutFullScreen();
+}
+
     // ============================================================================
     // THE CLEAN 5-TEXTURE ALLOCATOR MATRICES
     // ============================================================================
